@@ -27,6 +27,36 @@ use Data::SearchEngine::ElasticSearch::Results;
 
 =head1 IMPLEMENTATION NOTES
 
+=head2 Queries
+
+ElasticSearch's query DSL is complex and a pain in the ass to standardize in
+any useful way.  Thus, it is expected that if your L<Data::SearchEngine::Query>
+object has B<any> C<query> set then it must also have a C<type>.
+
+The query is then passed on to L<ElasticSearch> thusly:
+
+    $es->search(
+        # ...
+        query => { $query->type => $query->query }
+        # ...
+    );
+
+So if you want to do a query_string query, you would set up your query like
+this:
+
+    my $query = Data::SearchEngine::Query->new(
+        # ...
+        type => 'query_string',
+        query => { query => 'some query text' }
+        # ...
+    );
+
+See the documents for
+L<ElasticSearch's DLS|http://www.elasticsearch.org/guide/reference/query-dsl/>
+for more details.
+
+=head2 Indexing
+
 ElasticSearch wants an C<index> and C<type> for each Item that is indexed. It
 is expected that you will populate these values in the item thusly:
 
@@ -145,10 +175,13 @@ sub update {
 }
 
 sub search {
-    my ($self, $query, $uoptions) = @_;
+    my ($self, $query) = @_;
 
-    my $options = clone($uoptions);
-    # $options->{rows} = $query->count;
+    my $options;
+    if($query->has_query) {
+        die "Queries must have a type." unless $query->has_type;
+        $options->{query} = { $query->type => $query->query };
+    }
 
     # if($query->has_filters) {
     #     $options->{fq} = [];
@@ -157,12 +190,12 @@ sub search {
     #     }
     # }
 
-    # if($query->has_order) {
-    #     $options->{sort} = $query->order;
-    # }
+    if($query->has_order) {
+        $options->{sort} = $query->order;
+    }
 
-    # $options->{start} = ($query->page - 1) * $query->count;
-    $options->{query} = { query_string => { query => $query->query } };
+    $options->{from} = ($query->page - 1) * $query->count;
+    $options->{size} = $query->count;
 
     my $start = time;
     my $resp = $self->_es->search($options);
@@ -170,13 +203,24 @@ sub search {
     use Data::Dumper;
     print STDERR Dumper($resp);
 
-    # my $dpager = $resp->pager;
-    # The response will have no pager if there were no results, so we handle
-    # that here.
+    my $page = $query->page;
+    my $count = $query->count;
+    my $hit_count = $resp->{hits}->{total};
+    my $max_page = $hit_count / $count;
+    if($max_page != int($max_page)) {
+        # If trying to calculate how many pages we _could_ have gives us a
+        # non integer, add one to the page after inting it so we get the right
+        # integer.
+        $max_page = int($max_page) + 1;
+    }
+    if($page > $max_page) {
+        $page = $max_page;
+    }
+
     my $pager = Data::SearchEngine::Paginator->new(
-        current_page => 1, # XXX
-        entries_per_page => 10, # XXX
-        total_entries => $resp->{hits}->{total}
+        current_page => $page,
+        entries_per_page => $count,
+        total_entries => $hit_count
     );
 
     my $result = Data::SearchEngine::ElasticSearch::Results->new(
