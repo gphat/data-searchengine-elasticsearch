@@ -185,12 +185,13 @@ sub search {
     }
 
     $options->{index} = $query->index;
-    # if($query->has_filters) {
-    #     $options->{fq} = [];
-    #     foreach my $filter (keys %{ $query->filters }) {
-    #         push(@{ $options->{fq} }, $query->get_filter($filter));
-    #     }
-    # }
+
+    if($query->has_filters) {
+        $options->{filter} = {};
+        foreach my $filter ($query->filter_names) {
+            $options->{filter} = $query->get_filter($filter);
+        }
+    }
 
     if($query->has_facets) {
         $options->{facets} = $query->facets;
