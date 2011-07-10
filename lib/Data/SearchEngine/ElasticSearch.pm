@@ -17,21 +17,50 @@ use Data::SearchEngine::ElasticSearch::Results;
 
 =head1 SYNOPSIS
 
- XXX
+    use Data::SearchEngine::Query;
+    use Data::SearchEngine::ElasticSearch;
+
+    my $dse = Data::SearchEngine::ElasticSearch->new(
+        url => $self->url
+    );
+
+    my $query = Data::SearchEngine::Query->new(
+        index => $c->req->params->{type},
+        page => $c->req->params->{page} || 1,
+        count => $c->req->params->{count} || 10,
+        order => { _score => { order => 'asc' } },
+        type => 'query_string',
+        facets => {
+            etype => { terms => { field => 'etype' } },
+            author_organization_literal => { terms => { field => 'author_organization_literal' } },
+            author_literal => { terms => { field => 'author_literal' } },
+            source_literal => { terms => { field => 'source_literal' } },
+        }
+    );
+
+    my $results = $dse->search($query);
 
 =head1 DESCRIPTION
 
- XXX
- 
+Data::SearchEngine::ElasticSearch is a backend for Data::SearchEngine.  It
+aims to generalize the features of L<ElasticSearch> so that application
+authors are insulated from I<some> of the differences betwene search modules.
+
 =begin :prelude
 
 =head1 IMPLEMENTATION NOTES
 
+=head2 Incomplete
+
+ElasticSearch's query DSL is large and complex.  It is not well suited to
+abstraction by a library like this one.  As such you will almost likely find
+this abstraction lacking.  Expect it to improve as the author uses more of
+ElasticSearch's features in applications.
+
 =head2 Queries
 
-ElasticSearch's query DSL is complex and a pain in the ass to standardize in
-any useful way.  Thus, it is expected that if your L<Data::SearchEngine::Query>
-object has B<any> C<query> set then it must also have a C<type>.
+It is expected that if your L<Data::SearchEngine::Query> object has B<any>
+C<query> set then it must also have a C<type>.
 
 The query is then passed on to L<ElasticSearch> thusly:
 
@@ -114,6 +143,13 @@ has 'transport' => (
     default => 'http'
 );
 
+=method add ([ $items ])
+
+Add items to the index.  Keep in mind that the L<Data::SearchEngine::Item>
+should have values set for L<index> and L<type>.
+
+=cut
+
 sub add {
     my ($self, $items, $options) = @_;
 
@@ -130,6 +166,13 @@ sub add {
     }
     $self->_es->bulk_index(\@docs);
 }
+
+=method present ($item)
+
+Returns true if the L<Data::SearchEngine::Item> is present.  Uses the item's
+C<id>.
+
+=cut
 
 sub present {
     my ($self, $item) = @_;
@@ -154,6 +197,12 @@ sub remove {
     die("not implemented");
 }
 
+=method remove_by_id ($item)
+
+Remove the specified item from the index.  Uses the item's C<id>.
+
+=cut
+
 sub remove_by_id {
     my ($self, $item) = @_;
 
@@ -174,6 +223,12 @@ sub remove_by_id {
 sub update {
     die("not implemented");
 }
+
+=method search ($query)
+
+Search!
+
+=cut
 
 sub search {
     my ($self, $query) = @_;
@@ -243,25 +298,7 @@ sub search {
             }
         }
     }
-    # if(exists($facets->{facet_queries})) {
-    #     foreach my $facet (keys %{ $facets->{facet_queries} }) {
-    #         $result->set_facet($facet, $facets->{facet_queries}->{$facet});
-    #     }
-    # }
-    # 
-    # foreach my $doc ($resp->docs) {
     foreach my $doc (@{ $resp->{hits}->{hits} }) {
-    # 
-    #     my %values;
-    #     foreach my $fn ($doc->field_names) {
-    #         my @n_values = $doc->values_for($fn);
-    #         if (scalar(@n_values) > 1) {
-    #             @{$values{$fn}} = @n_values;
-    #         } else {
-    #             $values{$fn} = $n_values[0];
-    #         }
-    #     }
-    # 
         $result->add(Data::SearchEngine::Item->new(
             id      => $doc->{_id},
             values  => $doc->{_source},
