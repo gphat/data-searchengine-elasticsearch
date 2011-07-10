@@ -192,6 +192,10 @@ sub search {
     #     }
     # }
 
+    if($query->has_facets) {
+        $options->{facets} = $query->facets;
+    }
+
     if($query->has_order) {
         $options->{sort} = $query->order;
     }
@@ -227,13 +231,17 @@ sub search {
         pager => $pager,
         elapsed => time - $start
     );
-    # 
-    # my $facets = $resp->facet_counts;
-    # if(exists($facets->{facet_fields})) {
-    #     foreach my $facet (keys %{ $facets->{facet_fields} }) {
-    #         $result->set_facet($facet, $facets->{facet_fields}->{$facet});
-    #     }
-    # }
+
+    if(exists($resp->{facets})) {
+        foreach my $facet (keys %{ $resp->{facets} }) {
+            my $href = $resp->{facets}->{$facet};
+            if(exists($href->{terms})) {
+                foreach my $term (@{ $href->{terms} }) {
+                    $result->set_facet($facet, { count => $term->{count}, value => $term->{term} });
+                }
+            }
+        }
+    }
     # if(exists($facets->{facet_queries})) {
     #     foreach my $facet (keys %{ $facets->{facet_queries} }) {
     #         $result->set_facet($facet, $facets->{facet_queries}->{$facet});
