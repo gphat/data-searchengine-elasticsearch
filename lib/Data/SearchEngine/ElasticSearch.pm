@@ -83,6 +83,7 @@ has '_es' => (
         return ElasticSearch->new(
             servers => $self->servers,
             transport => $self->transport,
+            trace_calls => $self->debug
         )
     }
 );
@@ -183,6 +184,7 @@ sub search {
         $options->{query} = { $query->type => $query->query };
     }
 
+    $options->{index} = $query->index;
     # if($query->has_filters) {
     #     $options->{fq} = [];
     #     foreach my $filter (keys %{ $query->filters }) {
@@ -199,9 +201,6 @@ sub search {
 
     my $start = time;
     my $resp = $self->_es->search($options);
-
-    use Data::Dumper;
-    print STDERR Dumper($resp);
 
     my $page = $query->page;
     my $count = $query->count;
@@ -267,5 +266,3 @@ no Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
-
-__END__
