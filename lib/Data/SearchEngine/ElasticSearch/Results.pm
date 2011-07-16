@@ -1,6 +1,8 @@
 package Data::SearchEngine::ElasticSearch::Results;
 use Moose;
 
+# ABSTRACT: Search Results
+
 extends 'Data::SearchEngine::Results';
 
 with (
