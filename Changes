@@ -1,6 +1,8 @@
 Revision history for Data-SearchEngine-ElasticSearch
 
 {{$NEXT}}
+
+0.02 Jul 16 2011
   * Fix multiple facets not working
 
 0.01    Date/time
