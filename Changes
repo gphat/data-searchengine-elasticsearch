@@ -1,0 +1,8 @@
+Revision history for Data-SearchEngine-ElasticSearch
+
+{{$NEXT}}
+  * Fix multiple facets not working
+
+0.01    Date/time
+        First version, released on an unsuspecting world.
+

@@ -292,9 +292,11 @@ sub search {
         foreach my $facet (keys %{ $resp->{facets} }) {
             my $href = $resp->{facets}->{$facet};
             if(exists($href->{terms})) {
+                my @vals = ();
                 foreach my $term (@{ $href->{terms} }) {
-                    $result->set_facet($facet, { count => $term->{count}, value => $term->{term} });
+                    push(@vals, { count => $term->{count}, value => $term->{term} });
                 }
+                $result->set_facet($facet, \@vals);
             }
         }
     }
