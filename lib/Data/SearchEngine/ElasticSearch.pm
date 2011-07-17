@@ -301,9 +301,11 @@ sub search {
         }
     }
     foreach my $doc (@{ $resp->{hits}->{hits} }) {
+        my $values = $doc->{_source};
+        $values->{_index} = $doc->{_index};
         $result->add(Data::SearchEngine::Item->new(
             id      => $doc->{_id},
-            values  => $doc->{_source},
+            values  => $values,
         ));
     }
 
