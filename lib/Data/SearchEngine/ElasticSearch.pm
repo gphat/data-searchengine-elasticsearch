@@ -12,6 +12,7 @@ with (
     'Data::SearchEngine::Modifiable'
 );
 
+use Data::SearchEngine::Item;
 use Data::SearchEngine::Paginator;
 use Data::SearchEngine::ElasticSearch::Results;
 

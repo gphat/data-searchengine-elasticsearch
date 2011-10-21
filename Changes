@@ -1,6 +1,7 @@
 Revision history for Data-SearchEngine-ElasticSearch
 
 {{$NEXT}}
+  * Include item in ElasticSearch.pm to prevent runtime errors.
 
 0.03 Jul 17 2011
   * Make _index a value in the Item for search results.
