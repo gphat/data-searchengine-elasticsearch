@@ -1,6 +1,8 @@
 Revision history for Data-SearchEngine-ElasticSearch
 
 {{$NEXT}}
+
+0.04 Oct 21 2011
   * Include item in ElasticSearch.pm to prevent runtime errors.
 
 0.03 Jul 17 2011
