@@ -4,7 +4,7 @@ Data::SearchEngine::ElasticSearch - ElasticSearch support for Data::SearchEngine
 
 # VERSION
 
-version 0.01
+version 0.04
 
 # SYNOPSIS
 
@@ -12,13 +12,13 @@ version 0.01
     use Data::SearchEngine::ElasticSearch;
 
     my $dse = Data::SearchEngine::ElasticSearch->new(
-        url => $self->url
+        url => '127.0.0.1:9200'
     );
 
     my $query = Data::SearchEngine::Query->new(
-        index => $c->req->params->{type},
-        page => $c->req->params->{page} || 1,
-        count => $c->req->params->{count} || 10,
+        index => 'tweets',
+        page => 1,
+        count => 10,
         order => { _score => { order => 'asc' } },
         type => 'query_string',
         facets => {

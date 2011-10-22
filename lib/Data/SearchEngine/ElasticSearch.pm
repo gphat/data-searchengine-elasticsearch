@@ -242,6 +242,11 @@ sub search {
 
     $options->{index} = $query->index;
 
+    if($query->has_debug) {
+        # Turn on explain
+        $options->{explain} = 1;
+    }
+
     if($query->has_filters) {
         $options->{filter} = {};
         foreach my $filter ($query->filter_names) {
@@ -287,6 +292,7 @@ sub search {
         query => $query,
         pager => $pager,
         elapsed => time - $start
+        raw => $resp
     );
 
     if(exists($resp->{facets})) {
