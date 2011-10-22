@@ -1,6 +1,8 @@
 Revision history for Data-SearchEngine-ElasticSearch
 
 {{$NEXT}}
+
+0.05 Oct 22 2011
   * Use the debug and raw attributes of D:SE::Query
 
 0.04 Oct 21 2011
