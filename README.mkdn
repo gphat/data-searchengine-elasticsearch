@@ -46,6 +46,12 @@ abstraction by a library like this one.  As such you will almost likely find
 this abstraction lacking.  Expect it to improve as the author uses more of
 ElasticSearch's features in applications.
 
+## Explanations
+
+Setting `debug` to a true value will cause <explain> to be set when the query
+is sent to ElasticSearch.  You can find the explanation by examining the
+`raw` attribute of the [Data::SearchEngine::Results](http://search.cpan.org/perldoc?Data::SearchEngine::Results) object.
+
 ## Queries
 
 It is expected that if your [Data::SearchEngine::Query](http://search.cpan.org/perldoc?Data::SearchEngine::Query) object has __any__
