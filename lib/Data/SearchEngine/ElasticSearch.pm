@@ -291,7 +291,7 @@ sub search {
     my $result = Data::SearchEngine::ElasticSearch::Results->new(
         query => $query,
         pager => $pager,
-        elapsed => time - $start
+        elapsed => time - $start,
         raw => $resp
     );
 
