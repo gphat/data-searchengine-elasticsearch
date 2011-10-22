@@ -58,6 +58,12 @@ abstraction by a library like this one.  As such you will almost likely find
 this abstraction lacking.  Expect it to improve as the author uses more of
 ElasticSearch's features in applications.
 
+=head2 Explanations
+
+Setting C<debug> to a true value will cause <explain> to be set when the query
+is sent to ElasticSearch.  You can find the explanation by examining the
+C<raw> attribute of the L<Data::SearchEngine::Results> object.
+
 =head2 Queries
 
 It is expected that if your L<Data::SearchEngine::Query> object has B<any>
