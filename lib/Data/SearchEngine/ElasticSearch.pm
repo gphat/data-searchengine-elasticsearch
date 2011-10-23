@@ -22,7 +22,7 @@ use Data::SearchEngine::ElasticSearch::Results;
     use Data::SearchEngine::ElasticSearch;
 
     my $dse = Data::SearchEngine::ElasticSearch->new(
-        url => '127.0.0.1:9200'
+        servers => [ '127.0.0.1:9200' ]
     );
 
     my $query = Data::SearchEngine::Query->new(
