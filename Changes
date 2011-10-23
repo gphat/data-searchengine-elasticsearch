@@ -1,6 +1,7 @@
 Revision history for Data-SearchEngine-ElasticSearch
 
 {{$NEXT}}
+  * POD fixes
 
 0.05 Oct 22 2011
   * Use the debug and raw attributes of D:SE::Query
