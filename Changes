@@ -1,6 +1,8 @@
 Revision history for Data-SearchEngine-ElasticSearch
 
 {{$NEXT}}
+
+0.06 Oct 22 2011
   * POD fixes
 
 0.05 Oct 22 2011
