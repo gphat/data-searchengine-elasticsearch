@@ -289,7 +289,7 @@ sub search {
     }
 
     my $pager = Data::SearchEngine::Paginator->new(
-        current_page => $page,
+        current_page => $page || 1,
         entries_per_page => $count,
         total_entries => $hit_count
     );

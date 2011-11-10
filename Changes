@@ -1,6 +1,7 @@
 Revision history for Data-SearchEngine-ElasticSearch
 
 {{$NEXT}}
+  * Default to page 1 so that empty results to blow up Data::Paginator.
 
 0.06 Oct 22 2011
   * POD fixes
