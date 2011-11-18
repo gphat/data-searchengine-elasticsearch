@@ -172,6 +172,14 @@ has 'transport' => (
     default => 'http'
 );
 
+=method engine
+
+Returns the underlying search engine handle
+
+=cut
+
+sub engine { (shift)->_es }
+
 =method add ([ $items ])
 
 Add items to the index.  Keep in mind that the L<Data::SearchEngine::Item>
