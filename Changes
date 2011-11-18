@@ -1,6 +1,8 @@
 Revision history for Data-SearchEngine-ElasticSearch
 
 {{$NEXT}}
+
+0.08 Nov 18 2011
   * Make update an alias of add (Stevan Little)
 
 0.07 Nov 10 2011
