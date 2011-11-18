@@ -183,9 +183,9 @@ C<id>.
 
 sub present {
     my ($self, $item) = @_;
-    
+
     my $data = $item->values;
-    
+
     try {
         my $result = $self->_es->get(
             index => delete($data->{index}),
@@ -196,7 +196,7 @@ sub present {
         # ElasticSearch throws an exception if the document isn't there.
         return 0;
     }
-    
+
     return 1;
 }
 
@@ -223,13 +223,16 @@ sub remove_by_id {
     } catch {
         return 0;
     }
-    
+
     return 1;
 }
 
 sub update {
-    die("not implemented");
+    my $self = shift;
+
+    $self->add(@_);
 }
+
 
 =method search ($query)
 
