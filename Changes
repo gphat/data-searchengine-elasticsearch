@@ -1,6 +1,8 @@
 Revision history for Data-SearchEngine-ElasticSearch
 
 {{$NEXT}}
+
+0.09 Nov 21 2011
   * Add an engine method (Stevan Little)
 
 0.08 Nov 18 2011
