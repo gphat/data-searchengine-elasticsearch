@@ -174,6 +174,18 @@ sub add {
     $self->_es->bulk_index(\@docs);
 }
 
+=method engine
+
+Returns the underlying ElasticSearch implementation.
+
+=cut
+
+sub engine {
+    my ($self) = @_;
+    
+    return $self->_es;
+}
+
 =method present ($item)
 
 Returns true if the L<Data::SearchEngine::Item> is present.  Uses the item's
