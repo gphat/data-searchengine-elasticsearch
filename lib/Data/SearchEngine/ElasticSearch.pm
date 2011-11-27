@@ -114,7 +114,7 @@ is expected that you will populate these values in the item thusly:
 
 If you set multiple filters they will be ANDed together.
 
-=head Facets & Filters
+=head2 Facets & Filters
 
 If you use facets then any filters will be copied into the facet's
 C<facet_filter> so that the facets are limited similarly to the results.

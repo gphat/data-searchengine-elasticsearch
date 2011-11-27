@@ -4,7 +4,7 @@ Data::SearchEngine::ElasticSearch - ElasticSearch support for Data::SearchEngine
 
 # VERSION
 
-version 0.09
+version 0.10
 
 # SYNOPSIS
 
@@ -38,6 +38,10 @@ aims to generalize the features of [ElasticSearch](http://search.cpan.org/perldo
 authors are insulated from _some_ of the differences betwene search modules.
 
 # IMPLEMENTATION NOTES
+
+This module is opinionated. ElasticSearch's query language and features are
+powerful and difficult to reign in.  Therefore this module has taken some
+steps to bring things toward a more central feature set.
 
 ## Incomplete
 
@@ -93,6 +97,13 @@ is expected that you will populate these values in the item thusly:
     }
   );
   $dse->add($item);
+
+## Filters
+
+If you set multiple filters they will be ANDed together.
+
+If you use facets then any filters will be copied into the facet's
+`facet_filter` so that the facets are limited similarly to the results.
 
 # ATTRIBUTES
 
