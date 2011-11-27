@@ -51,6 +51,10 @@ authors are insulated from I<some> of the differences betwene search modules.
 
 =head1 IMPLEMENTATION NOTES
 
+This module is opinionated. ElasticSearch's query language and features are
+powerful and difficult to reign in.  Therefore this module has taken some
+steps to bring things toward a more central feature set.
+
 =head2 Incomplete
 
 ElasticSearch's query DSL is large and complex.  It is not well suited to
@@ -105,6 +109,15 @@ is expected that you will populate these values in the item thusly:
     }
   );
   $dse->add($item);
+
+=head2 Filters
+
+If you set multiple filters they will be ANDed together.
+
+=head Facets & Filters
+
+If you use facets then any filters will be copied into the facet's
+C<facet_filter> so that the facets are limited similarly to the results.
 
 =end :prelude
 
@@ -268,15 +281,31 @@ sub search {
         $options->{explain} = 1;
     }
 
+    my @facet_cache = ();
     if($query->has_filters) {
-        $options->{filter} = {};
         foreach my $filter ($query->filter_names) {
-            $options->{filter} = $query->get_filter($filter);
+            push(@facet_cache, $query->get_filter($filter));
         }
+        $options->{filter}->{and} = \@facet_cache;
     }
 
     if($query->has_facets) {
+        # Copy filters used in the overall query into each facet, thereby
+        # limiting the facets to only counting against the filtered bits.
+        # This is really to replicate my expecations and the way facets are
+        # usually used.
+        my %facets = %{ $query->facets };
         $options->{facets} = $query->facets;
+
+        if($query->has_filters) {
+            foreach my $f (keys %facets) {
+                $facets{$f}->{facet_filter}->{and} = \@facet_cache;
+            }
+        }
+
+        # Shlep the facets into the final query, even if we didn't do anything
+        # with the filters above.
+        $options->{facets} = \%facets;
     }
 
     if($query->has_order) {

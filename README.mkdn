@@ -4,7 +4,7 @@ Data::SearchEngine::ElasticSearch - ElasticSearch support for Data::SearchEngine
 
 # VERSION
 
-version 0.08
+version 0.09
 
 # SYNOPSIS
 
@@ -110,6 +110,10 @@ The transport to use.  Refer to [ElasticSearch](http://search.cpan.org/perldoc?E
 
 Add items to the index.  Keep in mind that the [Data::SearchEngine::Item](http://search.cpan.org/perldoc?Data::SearchEngine::Item)
 should have values set for [index](http://search.cpan.org/perldoc?index) and [type](http://search.cpan.org/perldoc?type).
+
+## engine
+
+Returns the underlying ElasticSearch implementation.
 
 ## present ($item)
 
