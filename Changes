@@ -1,6 +1,8 @@
 Revision history for Data-SearchEngine-ElasticSearch
 
 {{$NEXT}}
+
+0.10 Nov 27 2011
   * Automatically combine filters inside a parent and filter
   * Automatically copy filters into facets so that facets match the overall
     queries filters
