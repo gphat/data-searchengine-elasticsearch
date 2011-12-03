@@ -1,6 +1,8 @@
 Revision history for Data-SearchEngine-ElasticSearch
 
 {{$NEXT}}
+
+0.11 Dec 3 2011
   * Make _version a value in the Item for search results
 
 0.10 Nov 27 2011
