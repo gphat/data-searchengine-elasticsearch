@@ -181,13 +181,19 @@ sub add {
     my @docs;
     foreach my $item (@{ $items }) {
 
-        my $data = $item->values;
-        push(@docs, {
-            index => delete($data->{index}),
-            type => delete($data->{type}),
+        my %data = %{ $item->values };
+
+        my %doc = (
+            index => delete($data{index}),
+            type => delete($data{type}),
             id => $item->id,
-            data => $data
-        })
+            data => \%data
+        );
+        # Check for a version
+        if(exists($data{'_version'})) {
+            $doc{version} = delete($data{'_version'});
+        }
+        push(@docs, \%doc);
     }
     $self->_es->bulk_index(\@docs);
 }
@@ -366,13 +372,39 @@ sub search {
         my $values = $doc->{_source};
         $values->{_index} = $doc->{_index};
         $values->{_version} = $doc->{_version};
-        $result->add(Data::SearchEngine::Item->new(
-            id      => $doc->{_id},
-            values  => $values,
-        ));
+        $result->add($self->_doc_to_item($doc));
     }
 
     return $result;
+}
+
+sub _doc_to_item {
+    my ($self, $doc) = @_;
+
+    my $values = $doc->{_source};
+    $values->{_index} = $doc->{_index};
+    $values->{_version} = $doc->{_version};
+    return Data::SearchEngine::Item->new(
+        id      => $doc->{_id},
+        values  => $values,
+    );
+}
+
+=method find_by_id ($index, $type, $id)
+
+Find a document by it's unique id.
+
+=cut
+sub find_by_id {
+    my ($self, $index, $type, $id) = @_;
+
+    my $doc = $self->_es->get(
+        index => $index,
+        type => $type,
+        id => $id
+    );
+
+    return $self->_doc_to_item($doc);
 }
 
 no Moose;

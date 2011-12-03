@@ -1,6 +1,9 @@
 Revision history for Data-SearchEngine-ElasticSearch
 
 {{$NEXT}}
+  * Clone the incoming item hash so that we don't modify the one passed to us
+  * If _version is present in the item, pass it along in the index call
+  * Add find_by_id
 
 0.11 Dec 3 2011
   * Make _version a value in the Item for search results

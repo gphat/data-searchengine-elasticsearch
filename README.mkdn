@@ -50,6 +50,11 @@ abstraction by a library like this one.  As such you will almost likely find
 this abstraction lacking.  Expect it to improve as the author uses more of
 ElasticSearch's features in applications.
 
+## Resultes
+
+The `_index` and `_version` keys will both be populated in the returned
+[Data::SearchEngine::Item](http://search.cpan.org/perldoc?Data::SearchEngine::Item).
+
 ## Explanations
 
 Setting `debug` to a true value will cause <explain> to be set when the query
