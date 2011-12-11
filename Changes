@@ -1,6 +1,8 @@
 Revision history for Data-SearchEngine-ElasticSearch
 
 {{$NEXT}}
+
+0.13 Dec 11 2011
   * Use Time::HiRes so that the elapsed time works.
 
 0.12 Dec 3 2011
