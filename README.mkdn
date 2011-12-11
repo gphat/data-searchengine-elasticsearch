@@ -4,7 +4,7 @@ Data::SearchEngine::ElasticSearch - ElasticSearch support for Data::SearchEngine
 
 # VERSION
 
-version 0.11
+version 0.12
 
 # SYNOPSIS
 
@@ -145,6 +145,10 @@ Remove the specified item from the index.  Uses the item's `id`.
 ## search ($query)
 
 Search!
+
+## find_by_id ($index, $type, $id)
+
+Find a document by it's unique id.
 
 # AUTHOR
 

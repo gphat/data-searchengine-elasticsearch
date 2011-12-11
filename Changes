@@ -1,6 +1,7 @@
 Revision history for Data-SearchEngine-ElasticSearch
 
 {{$NEXT}}
+  * Use Time::HiRes so that the elapsed time works.
 
 0.12 Dec 3 2011
   * Clone the incoming item hash so that we don't modify the one passed to us

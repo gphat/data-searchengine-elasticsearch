@@ -5,6 +5,7 @@ use Moose;
 
 use Clone qw(clone);
 use ElasticSearch;
+use Time::HiRes;
 use Try::Tiny;
 
 with (
@@ -326,7 +327,7 @@ sub search {
     $options->{from} = ($query->page - 1) * $query->count;
     $options->{size} = $query->count;
 
-    my $start = time;
+    my $start = Time::HiRes::time;
     my $resp = $self->_es->search($options);
 
     my $page = $query->page;
