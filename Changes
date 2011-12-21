@@ -1,6 +1,8 @@
 Revision history for Data-SearchEngine-ElasticSearch
 
 {{$NEXT}}
+
+0.14 Dec 20 2011
   * Don't wrap delete in a try {}, since it breaks for no reason
   * Don't delete type and index from the passed in item
 
