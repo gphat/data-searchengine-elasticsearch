@@ -251,17 +251,12 @@ sub remove_by_id {
     my ($self, $item) = @_;
 
     my $data = $item->values;
-    try {
-        $self->_es->delete(
-            index => delete($data->{index}),
-            type => delete($data->{type}),
-            id => $item->id
-        );
-    } catch {
-        return 0;
-    }
 
-    return 1;
+    $self->_es->delete(
+        index => $data->{index},
+        type => $data->{type},
+        id => $item->id
+    );
 }
 
 sub update {
