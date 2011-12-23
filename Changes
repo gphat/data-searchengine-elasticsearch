@@ -1,6 +1,8 @@
 Revision history for Data-SearchEngine-ElasticSearch
 
 {{$NEXT}}
+
+0.16 Dec 23 2011
   * Reverse the last change, turning it into a query() parameter.
 
 0.15 Dec 23 2011
