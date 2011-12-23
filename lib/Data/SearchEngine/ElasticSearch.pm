@@ -119,7 +119,11 @@ is expected that you will populate these values in the item thusly:
 =head2 Filters
 
 If you set multiple filters they will be ANDed together.  If you want to change
-this behavior then you can change the C<filter_combiner> attribute to "or".
+this behavior then you can supply an additional argument to the C<query> method:
+
+  $dse->search($query, 'or');
+  
+This defaults to 'and'.
 
 =head2 Facets & Filters
 
@@ -142,19 +146,6 @@ has '_es' => (
             trace_calls => $self->debug
         )
     }
-);
-
-=attr filter_combiner
-
-Boolean used to combine filters. Should be either "and" or "or". Defaults to
-and.
-
-=cut
-
-has 'filter_combiner' => (
-    is => 'rw',
-    isa => 'Str',
-    default => 'and'
 );
 
 =attr servers
@@ -285,7 +276,11 @@ Search!
 =cut
 
 sub search {
-    my ($self, $query) = @_;
+    my ($self, $query, $filter_combine) = @_;
+
+    unless(defined($filter_combine)) {
+        $filter_combine = 'and';
+    }
 
     my $options;
     if($query->has_query) {
@@ -305,7 +300,7 @@ sub search {
         foreach my $filter ($query->filter_names) {
             push(@facet_cache, $query->get_filter($filter));
         }
-        $options->{filter}->{$self->filter_combiner} = \@facet_cache;
+        $options->{filter}->{$filter_combine} = \@facet_cache;
     }
 
     if($query->has_facets) {
@@ -318,7 +313,7 @@ sub search {
 
         if($query->has_filters) {
             foreach my $f (keys %facets) {
-                $facets{$f}->{facet_filter}->{$self->filter_combiner} = \@facet_cache;
+                $facets{$f}->{facet_filter}->{$filter_combine} = \@facet_cache;
             }
         }
 
