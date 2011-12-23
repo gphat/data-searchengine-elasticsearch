@@ -118,7 +118,8 @@ is expected that you will populate these values in the item thusly:
 
 =head2 Filters
 
-If you set multiple filters they will be ANDed together.
+If you set multiple filters they will be ANDed together.  If you want to change
+this behavior then you can change the C<filter_combiner> attribute to "or".
 
 =head2 Facets & Filters
 
@@ -143,7 +144,18 @@ has '_es' => (
     }
 );
 
+=attr filter_combiner
+
+Boolean used to combine filters. Should be either "and" or "or". Defaults to
+and.
+
 =cut
+
+has 'filter_combiner' => (
+    is => 'rw',
+    isa => 'Str',
+    default => 'and'
+);
 
 =attr servers
 
@@ -293,7 +305,7 @@ sub search {
         foreach my $filter ($query->filter_names) {
             push(@facet_cache, $query->get_filter($filter));
         }
-        $options->{filter}->{and} = \@facet_cache;
+        $options->{filter}->{$self->filter_combiner} = \@facet_cache;
     }
 
     if($query->has_facets) {
@@ -306,7 +318,7 @@ sub search {
 
         if($query->has_filters) {
             foreach my $f (keys %facets) {
-                $facets{$f}->{facet_filter}->{and} = \@facet_cache;
+                $facets{$f}->{facet_filter}->{$self->filter_combiner} = \@facet_cache;
             }
         }
 

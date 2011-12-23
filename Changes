@@ -1,6 +1,9 @@
 Revision history for Data-SearchEngine-ElasticSearch
 
 {{$NEXT}}
+  * Make filter_combiner attribute to allow configuration of filter combining
+    behavior. Previously only "and" was allowed.  You can now use "or" when
+    it makes sense.
 
 0.14 Dec 20 2011
   * Don't wrap delete in a try {}, since it breaks for no reason
