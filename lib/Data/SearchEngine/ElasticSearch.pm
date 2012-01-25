@@ -326,6 +326,10 @@ sub search {
         $options->{sort} = $query->order;
     }
 
+    if($query->has_fields) {
+        $options->{fields} = $query->fields;
+    }
+
     $options->{from} = ($query->page - 1) * $query->count;
     $options->{size} = $query->count;
 
@@ -384,7 +388,7 @@ sub search {
 sub _doc_to_item {
     my ($self, $doc) = @_;
 
-    my $values = $doc->{_source};
+    my $values = $doc->{_source} || $doc->{fields};
     $values->{_index} = $doc->{_index};
     $values->{_version} = $doc->{_version};
     return Data::SearchEngine::Item->new(
