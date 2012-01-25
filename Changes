@@ -1,6 +1,10 @@
 Revision history for Data-SearchEngine-ElasticSearch
 
 {{$NEXT}}
+  * Use the fields attribute to return a smaller document, upon request.
+    Requires Data::SearchEngine 0.33.
+
+0.16 Dec 23 2011
   * Reverse the last change, turning it into a query() parameter.
 
 0.15 Dec 23 2011
