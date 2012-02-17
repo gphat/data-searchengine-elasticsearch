@@ -2,6 +2,9 @@ Revision history for Data-SearchEngine-ElasticSearch
 
 {{$NEXT}}
 
+0.18 Feb 16 2012
+  * Score wasn't being passed all the way up to the resulting Item.
+
 0.17 Jan 25 2012
   * Use the fields attribute to return a smaller document, upon request.
     Requires Data::SearchEngine 0.33.
