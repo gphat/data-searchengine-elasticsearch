@@ -172,6 +172,14 @@ has 'transport' => (
     default => 'http'
 );
 
+=method engine
+
+Returns the underlying search engine handle
+
+=cut
+
+sub engine { (shift)->_es }
+
 =method add ([ $items ])
 
 Add items to the index.  Keep in mind that the L<Data::SearchEngine::Item>
@@ -326,6 +334,10 @@ sub search {
         $options->{sort} = $query->order;
     }
 
+    if($query->has_fields) {
+        $options->{fields} = $query->fields;
+    }
+
     $options->{from} = ($query->page - 1) * $query->count;
     $options->{size} = $query->count;
 
@@ -384,11 +396,12 @@ sub search {
 sub _doc_to_item {
     my ($self, $doc) = @_;
 
-    my $values = $doc->{_source};
+    my $values = $doc->{_source} || $doc->{fields};
     $values->{_index} = $doc->{_index};
     $values->{_version} = $doc->{_version};
     return Data::SearchEngine::Item->new(
         id      => $doc->{_id},
+        score   => $doc->{_score},
         values  => $values,
     );
 }
